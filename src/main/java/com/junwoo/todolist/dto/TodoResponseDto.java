@@ -23,12 +23,12 @@ public class TodoResponseDto {
 
     }
 
-    public TodoResponseDto(Todo saveTodo) {
-        this.id = saveTodo.getId();
-        this.title = saveTodo.getTitle();
-        this.contents = saveTodo.getContents();
-        this.writer = saveTodo.getWriter();
-        this.localDateTime = saveTodo.getLocalDateTime();
+    public TodoResponseDto(Todo todo) {
+        this.id = todo.getId();
+        this.title = todo.getTitle();
+        this.contents = todo.getContents();
+        this.writer = todo.getWriter();
+        this.localDateTime = todo.getLocalDateTime();
     }
 
 }

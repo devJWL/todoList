@@ -38,4 +38,12 @@ public class TodoService {
     public List<TodoResponseDto> readAll() {
         return todoRepository.findAll();
     }
+
+    public TodoResponseDto deleteTodo(Long id, String password) {
+        return todoRepository.delete(id, password);
+    }
+
+//    public TodoResponseDto updateTodo(Long id, TodoRequestDto todoRequestDto) {
+//        return todoRepository.update(id, todoRequestDto);
+//    }
 }

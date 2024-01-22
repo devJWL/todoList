@@ -23,7 +23,7 @@ public class TodoController {
         return todoService.createTodo(todoRequestDto);
     }
 
-    @GetMapping("/read{id}")
+    @GetMapping("/read")
     public TodoResponseDto readTodo(@RequestParam Long id) {
         return todoService.readById(id);
     }
@@ -31,5 +31,14 @@ public class TodoController {
     @GetMapping("/read/list")
     public List<TodoResponseDto> readAllTodo() {
         return todoService.readAll();
+    }
+
+//    @PutMapping("/update/{id}")
+//    public TodoResponseDto updateTodo(@RequestParam Long id, @RequestBody TodoRequestDto todoRequestDto) {
+//        return todoService.updateTodo(id, todoRequestDto);
+//    }
+    @DeleteMapping("/delete")
+    public TodoResponseDto deleteTodo(@RequestParam Long id, @RequestParam String password) {
+        return todoService.deleteTodo(id, password);
     }
 }

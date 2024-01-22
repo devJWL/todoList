@@ -21,6 +21,9 @@ public class Todo {
     private String password;
     private LocalDateTime localDateTime;
 
+    public Todo() {
+
+    }
     public Todo(TodoRequestDto todoRequestDto) {
         this.title = todoRequestDto.getTitle();
         this.contents = todoRequestDto.getContents();

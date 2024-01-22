@@ -11,7 +11,9 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 
 @Repository
@@ -47,27 +49,20 @@ public class TodoRepository {
     }
 
     public TodoResponseDto findById(Long id) {
-        String sql =  "SELECT * FROM todo where id = ?";
-        return jdbcTemplate.query(sql, rs -> {
-            TodoResponseDto todoResponseDto;
-
-            if(rs.next()) {
-                todoResponseDto = new TodoResponseDto();
-                todoResponseDto.setId(rs.getLong("id"));
-                todoResponseDto.setTitle(rs.getString("title"));
-                todoResponseDto.setContents(rs.getString("contents"));
-                todoResponseDto.setWriter(rs.getString("writer"));
-                todoResponseDto.setLocalDateTime(rs.getTimestamp("timestamp").toLocalDateTime());
-            } else {
-                todoResponseDto = null;
-            }
-            return todoResponseDto;
-        }, id);
+        TodoResponseDto todoResponseDto = null;
+        try {
+            Todo todo = findByIdHelper(id).orElseThrow(() -> new Exception("해당 번호의 글은 존재하지 않습니다."));
+            todoResponseDto = new TodoResponseDto(todo);
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return todoResponseDto;
     }
 
     public List<TodoResponseDto> findAll() {
         String sql =  "SELECT * FROM todo";
-        return jdbcTemplate.query(sql, new RowMapper<TodoResponseDto>() {
+        List<TodoResponseDto> todoResponseDtoList = jdbcTemplate.query(sql, new RowMapper<TodoResponseDto>() {
             @Override
             public TodoResponseDto mapRow(ResultSet rs, int rowNum) throws SQLException {
                 // SQL 의 결과로 받아온 Memo 데이터들을 MemoResponseDto 타입으로 변환해줄 메서드
@@ -79,5 +74,49 @@ public class TodoRepository {
                 return new TodoResponseDto(id, title, contents, writer, timestamp.toLocalDateTime());
             }
         });
+        todoResponseDtoList.sort(new Comparator<TodoResponseDto>() {
+            @Override
+            public int compare(TodoResponseDto o1, TodoResponseDto o2) {
+                return o1.getLocalDateTime().compareTo(o2.getLocalDateTime());
+            }
+        });
+        return todoResponseDtoList;
+    }
+
+    public TodoResponseDto delete(Long id, String password) {
+        Optional<TodoResponseDto> todoResponseDto = Optional.empty();
+        try {
+            Todo todo = findByIdHelper(id).orElseThrow(() -> new Exception("해당 번호의 글은 존재하지 않습니다."));
+            if (todo.getPassword().equals(password)) {
+                String sql = "DELETE FROM todo WHERE id = ?";
+                jdbcTemplate.update(sql, id);
+                todoResponseDto = Optional.of(new TodoResponseDto(todo));
+            }
+            else {
+                throw new Exception("비밀번호가 다릅니다");
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return todoResponseDto.orElse(new TodoResponseDto());
+    }
+
+
+    private Optional<Todo> findByIdHelper(Long id) {
+        String sql =  "SELECT * FROM todo where id = ?";
+        return jdbcTemplate.query(sql, rs -> {
+            Todo todo = null;
+            if(rs.next()) {
+                todo = new Todo();
+                todo.setId(rs.getLong("id"));
+                todo.setTitle(rs.getString("title"));
+                todo.setContents(rs.getString("contents"));
+                todo.setWriter(rs.getString("writer"));
+                todo.setPassword(rs.getString("password"));
+                todo.setLocalDateTime(rs.getTimestamp("timestamp").toLocalDateTime());
+            }
+            return Optional.ofNullable(todo);
+        }, id);
     }
 }
