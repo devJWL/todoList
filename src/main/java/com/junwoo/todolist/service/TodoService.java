@@ -28,4 +28,8 @@ public class TodoService {
         TodoResponseDto todoResponseDto = new TodoResponseDto(savedTodo);
         return todoResponseDto;
     }
+
+    public TodoResponseDto readById(Long id) {
+        return todoRepository.findById(id);
+    }
 }

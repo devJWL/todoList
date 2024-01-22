@@ -1,6 +1,7 @@
 package com.junwoo.todolist.repository;
 
 
+import com.junwoo.todolist.dto.TodoResponseDto;
 import com.junwoo.todolist.entity.Todo;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -43,5 +44,24 @@ public class TodoRepository {
         Long id = keyHolder.getKey().longValue();
         todo.setId(id);
         return todo;
+    }
+
+    public TodoResponseDto findById(Long id) {
+        String sql =  "SELECT * FROM todo where id = ?";
+        return jdbcTemplate.query(sql, rs -> {
+            TodoResponseDto todoResponseDto;
+
+            if(rs.next()) {
+                todoResponseDto = new TodoResponseDto();
+                todoResponseDto.setId(rs.getLong("id"));
+                todoResponseDto.setTitle(rs.getString("title"));
+                todoResponseDto.setContents(rs.getString("contents"));
+                todoResponseDto.setWriter(rs.getString("writer"));
+                todoResponseDto.setLocalDateTime(rs.getTimestamp("timestamp").toLocalDateTime());
+            } else {
+                todoResponseDto = null;
+            }
+            return todoResponseDto;
+        }, id);
     }
 }

@@ -4,10 +4,7 @@ package com.junwoo.todolist.controller;
 import com.junwoo.todolist.dto.TodoRequestDto;
 import com.junwoo.todolist.dto.TodoResponseDto;
 import com.junwoo.todolist.service.TodoService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -22,5 +19,10 @@ public class TodoController {
     @PostMapping("/create")
     public TodoResponseDto createTodo(@RequestBody TodoRequestDto todoRequestDto) {
         return todoService.createTodo(todoRequestDto);
+    }
+
+    @GetMapping("/read{id}")
+    public TodoResponseDto readTodo(@RequestParam Long id) {
+        return todoService.readById(id);
     }
 }

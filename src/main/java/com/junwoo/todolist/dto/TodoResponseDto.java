@@ -19,6 +19,10 @@ public class TodoResponseDto {
     private String writer;
     private LocalDateTime localDateTime;
 
+    public TodoResponseDto() {
+
+    }
+
     public TodoResponseDto(Todo saveTodo) {
         this.id = saveTodo.getId();
         this.title = saveTodo.getTitle();
@@ -26,4 +30,6 @@ public class TodoResponseDto {
         this.writer = saveTodo.getWriter();
         this.localDateTime = saveTodo.getLocalDateTime();
     }
+
+
 }
