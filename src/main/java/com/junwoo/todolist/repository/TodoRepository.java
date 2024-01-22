@@ -66,7 +66,6 @@ public class TodoRepository {
         List<TodoResponseDto> todoResponseDtoList = jdbcTemplate.query(sql, new RowMapper<TodoResponseDto>() {
             @Override
             public TodoResponseDto mapRow(ResultSet rs, int rowNum) throws SQLException {
-                // SQL 의 결과로 받아온 Memo 데이터들을 MemoResponseDto 타입으로 변환해줄 메서드
                 Long id = rs.getLong("id");
                 String title = rs.getString("title");
                 String contents = rs.getString("contents");
