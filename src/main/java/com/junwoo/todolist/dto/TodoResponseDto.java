@@ -31,5 +31,4 @@ public class TodoResponseDto {
         this.localDateTime = saveTodo.getLocalDateTime();
     }
 
-
 }

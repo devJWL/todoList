@@ -7,6 +7,8 @@ import com.junwoo.todolist.entity.Todo;
 import com.junwoo.todolist.repository.TodoRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service
 public class TodoService {
@@ -31,5 +33,9 @@ public class TodoService {
 
     public TodoResponseDto readById(Long id) {
         return todoRepository.findById(id);
+    }
+
+    public List<TodoResponseDto> readAll() {
+        return todoRepository.findAll();
     }
 }

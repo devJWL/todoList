@@ -6,6 +6,8 @@ import com.junwoo.todolist.dto.TodoResponseDto;
 import com.junwoo.todolist.service.TodoService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/junwoo")
@@ -24,5 +26,10 @@ public class TodoController {
     @GetMapping("/read{id}")
     public TodoResponseDto readTodo(@RequestParam Long id) {
         return todoService.readById(id);
+    }
+
+    @GetMapping("/read/list")
+    public List<TodoResponseDto> readAllTodo() {
+        return todoService.readAll();
     }
 }

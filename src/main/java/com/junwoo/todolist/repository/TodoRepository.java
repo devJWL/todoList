@@ -4,14 +4,14 @@ package com.junwoo.todolist.repository;
 import com.junwoo.todolist.dto.TodoResponseDto;
 import com.junwoo.todolist.entity.Todo;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.sql.PreparedStatement;
-import java.sql.Statement;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Repository
@@ -63,5 +63,21 @@ public class TodoRepository {
             }
             return todoResponseDto;
         }, id);
+    }
+
+    public List<TodoResponseDto> findAll() {
+        String sql =  "SELECT * FROM todo";
+        return jdbcTemplate.query(sql, new RowMapper<TodoResponseDto>() {
+            @Override
+            public TodoResponseDto mapRow(ResultSet rs, int rowNum) throws SQLException {
+                // SQL 의 결과로 받아온 Memo 데이터들을 MemoResponseDto 타입으로 변환해줄 메서드
+                Long id = rs.getLong("id");
+                String title = rs.getString("title");
+                String contents = rs.getString("contents");
+                String writer = rs.getString("writer");
+                Timestamp timestamp = rs.getTimestamp("timestamp");
+                return new TodoResponseDto(id, title, contents, writer, timestamp.toLocalDateTime());
+            }
+        });
     }
 }
