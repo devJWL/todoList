@@ -1,6 +1,7 @@
-package com.junwoo.todolist.entitiy;
+package com.junwoo.todolist.entity;
 
 
+import com.junwoo.todolist.dto.TodoRequestDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,4 +21,11 @@ public class Todo {
     private String password;
     private LocalDateTime localDateTime;
 
+    public Todo(TodoRequestDto todoRequestDto) {
+        this.title = todoRequestDto.getTitle();
+        this.contents = todoRequestDto.getContents();
+        this.writer = todoRequestDto.getWriter();
+        this.password = todoRequestDto.getPassword();
+        this.localDateTime = todoRequestDto.getLocalDateTime();
+    }
 }
