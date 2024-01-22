@@ -33,10 +33,11 @@ public class TodoController {
         return todoService.readAll();
     }
 
-//    @PutMapping("/update/{id}")
-//    public TodoResponseDto updateTodo(@RequestParam Long id, @RequestBody TodoRequestDto todoRequestDto) {
-//        return todoService.updateTodo(id, todoRequestDto);
-//    }
+    @PutMapping("/update")
+    public TodoResponseDto updateTodo(@RequestParam Long id, @RequestParam String password, @RequestBody TodoRequestDto todoRequestDto) {
+        return todoService.updateTodo(id, password, todoRequestDto);
+    }
+
     @DeleteMapping("/delete")
     public TodoResponseDto deleteTodo(@RequestParam Long id, @RequestParam String password) {
         return todoService.deleteTodo(id, password);

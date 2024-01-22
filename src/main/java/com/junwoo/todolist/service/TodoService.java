@@ -39,11 +39,12 @@ public class TodoService {
         return todoRepository.findAll();
     }
 
+    public TodoResponseDto updateTodo(Long id, String password, TodoRequestDto todoRequestDto) {
+        return todoRepository.update(id, password, todoRequestDto);
+    }
+
     public TodoResponseDto deleteTodo(Long id, String password) {
         return todoRepository.delete(id, password);
     }
-
-//    public TodoResponseDto updateTodo(Long id, TodoRequestDto todoRequestDto) {
-//        return todoRepository.update(id, todoRequestDto);
-//    }
 }
+

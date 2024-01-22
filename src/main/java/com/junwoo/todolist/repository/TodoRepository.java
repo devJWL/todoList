@@ -1,6 +1,7 @@
 package com.junwoo.todolist.repository;
 
 
+import com.junwoo.todolist.dto.TodoRequestDto;
 import com.junwoo.todolist.dto.TodoResponseDto;
 import com.junwoo.todolist.entity.Todo;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -83,6 +84,30 @@ public class TodoRepository {
         return todoResponseDtoList;
     }
 
+
+    public TodoResponseDto update(Long id, String password, TodoRequestDto todoRequestDto) {
+        Optional<TodoResponseDto> todoResponseDto = Optional.empty();
+        try {
+            Todo todo = findByIdHelper(id).orElseThrow(() -> new Exception("해당 번호의 글은 존재하지 않습니다."));
+            if (todo.getPassword().equals(password)) {
+                String newTitle = todoRequestDto.getTitle();
+                String newContents = todoRequestDto.getContents();
+                String newWriter = todoRequestDto.getWriter();
+                String sql = "UPDATE todo SET title = ?, contents = ?,  writer = ?   WHERE id = ?";
+                jdbcTemplate.update(sql, newTitle, newContents, newWriter, id);
+                todo.setTitle(newTitle); todo.setContents(newContents); todo.setWriter(newWriter);
+                todoResponseDto = Optional.of(new TodoResponseDto(todo));
+            }
+            else {
+                throw new Exception("비밀번호가 다릅니다");
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return todoResponseDto.orElse(new TodoResponseDto());
+    }
+
     public TodoResponseDto delete(Long id, String password) {
         Optional<TodoResponseDto> todoResponseDto = Optional.empty();
         try {
@@ -119,4 +144,6 @@ public class TodoRepository {
             return Optional.ofNullable(todo);
         }, id);
     }
+
+
 }
