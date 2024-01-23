@@ -14,6 +14,9 @@
 4. 특정 일정 수정 - 비밀번호를을 이용하여 일치 시 수행
 5. 특정 일정 삭제 - 비밀번호를을 이용하여 일치 시 수행
 ---
+## Use Case Diagram
+
+---
 ## API 명세서
 | 기능 | Method | URL | Request Param | Request Body| Response Body |
 |:---:|:---:|:---:|:---:|:---:|:---:|
@@ -23,3 +26,4 @@
 | 특정 일정 수정 | PUT | /api/todo/update | ?'id'=id&'password'=password| 'title':title, <br>'contents':contents, <br>'writer':writer, <br>'password':password} | 'id':id <br>'title':title, <br>'contents':contents, <br>'writer':writer, <br>'localDateTime':localDateTime}|
 | 특정 일정 삭제 | DELETE | /api/todo/delete | ?'id'=id&'password'=password| - | 'id':id <br>'title':title, <br>'contents':contents, <br>'writer':writer, <br>'localDateTime':localDateTime}|
 ---
+## ERD
