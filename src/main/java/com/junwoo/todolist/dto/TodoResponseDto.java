@@ -4,6 +4,7 @@ import com.junwoo.todolist.entity.Todo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 
@@ -18,16 +19,17 @@ public class TodoResponseDto {
     private String contents;
     private String writer;
     private LocalDateTime localDateTime;
-
+    private HttpStatus httpStatus;
     public TodoResponseDto() {
 
     }
 
-    public TodoResponseDto(Todo todo) {
+    public TodoResponseDto(Todo todo, HttpStatus httpStatus) {
         this.id = todo.getId();
         this.title = todo.getTitle();
         this.contents = todo.getContents();
         this.writer = todo.getWriter();
         this.localDateTime = todo.getLocalDateTime();
+        this.httpStatus = httpStatus;
     }
 }

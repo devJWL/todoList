@@ -4,6 +4,8 @@ package com.junwoo.todolist.repository;
 import com.junwoo.todolist.dto.TodoRequestDto;
 import com.junwoo.todolist.dto.TodoResponseDto;
 import com.junwoo.todolist.entity.Todo;
+import com.junwoo.todolist.exception.IdNotFoundException;
+import com.junwoo.todolist.exception.passwardWrongException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -12,7 +14,6 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.time.LocalDateTime;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,10 +53,10 @@ public class TodoRepository {
     public TodoResponseDto findById(Long id) {
         Optional<TodoResponseDto> todoResponseDto = Optional.empty();
         try {
-            Todo todo = findByIdHelper(id).orElseThrow(() -> new Exception("해당 번호의 글은 존재하지 않습니다."));
+            Todo todo = findByIdHelper(id).orElseThrow(() -> new IdNotFoundException("해당 번호의 글은 존재하지 않습니다."));
             todoResponseDto = Optional.of(new TodoResponseDto(todo));
         }
-        catch (Exception e) {
+        catch (IdNotFoundException e) {
             System.out.println(e.getMessage());
         }
         return todoResponseDto.orElse(new TodoResponseDto());
@@ -75,12 +76,7 @@ public class TodoRepository {
             }
         });
 
-        todoResponseDtoList.sort(new Comparator<TodoResponseDto>() {
-            @Override
-            public int compare(TodoResponseDto o1, TodoResponseDto o2) {
-                return o1.getLocalDateTime().compareTo(o2.getLocalDateTime());
-            }
-        });
+        todoResponseDtoList.sort((o1, o2) -> o2.getLocalDateTime().compareTo(o1.getLocalDateTime()));
         return todoResponseDtoList;
     }
 
@@ -88,7 +84,7 @@ public class TodoRepository {
     public TodoResponseDto update(Long id, String password, TodoRequestDto todoRequestDto) {
         Optional<TodoResponseDto> todoResponseDto = Optional.empty();
         try {
-            Todo todo = findByIdHelper(id).orElseThrow(() -> new Exception("해당 번호의 글은 존재하지 않습니다."));
+            Todo todo = findByIdHelper(id).orElseThrow(() -> new IdNotFoundException("해당 번호의 글은 존재하지 않습니다."));
             if (todo.getPassword().equals(password)) {
                 String newTitle = todoRequestDto.getTitle();
                 String newContents = todoRequestDto.getContents();
@@ -99,10 +95,13 @@ public class TodoRepository {
                 todoResponseDto = Optional.of(new TodoResponseDto(todo));
             }
             else {
-                throw new Exception("비밀번호가 다릅니다");
+                throw new passwardWrongException("비밀번호가 다릅니다");
             }
         }
-        catch (Exception e) {
+        catch (IdNotFoundException e) {
+            System.out.println(e.getMessage());
+        }
+        catch (passwardWrongException e) {
             System.out.println(e.getMessage());
         }
         return todoResponseDto.orElse(new TodoResponseDto());
@@ -111,17 +110,20 @@ public class TodoRepository {
     public TodoResponseDto delete(Long id, String password) {
         Optional<TodoResponseDto> todoResponseDto = Optional.empty();
         try {
-            Todo todo = findByIdHelper(id).orElseThrow(() -> new Exception("해당 번호의 글은 존재하지 않습니다."));
+            Todo todo = findByIdHelper(id).orElseThrow(() -> new IdNotFoundException("해당 번호의 글은 존재하지 않습니다."));
             if (todo.getPassword().equals(password)) {
                 String sql = "DELETE FROM todo WHERE id = ?";
                 jdbcTemplate.update(sql, id);
                 todoResponseDto = Optional.of(new TodoResponseDto(todo));
             }
             else {
-                throw new Exception("비밀번호가 다릅니다");
+                throw new passwardWrongException("비밀번호가 다릅니다");
             }
         }
-        catch (Exception e) {
+        catch (IdNotFoundException e) {
+            System.out.println(e.getMessage());
+        }
+        catch (passwardWrongException e) {
             System.out.println(e.getMessage());
         }
         return todoResponseDto.orElse(new TodoResponseDto());
