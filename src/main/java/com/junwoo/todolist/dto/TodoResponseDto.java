@@ -30,5 +30,4 @@ public class TodoResponseDto {
         this.writer = todo.getWriter();
         this.localDateTime = todo.getLocalDateTime();
     }
-
 }

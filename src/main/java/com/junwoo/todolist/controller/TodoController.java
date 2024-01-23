@@ -10,7 +10,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/junwoo")
+@RequestMapping("/api/todo")
 public class TodoController {
     private final TodoService todoService;
     public TodoController(TodoService todoService) {
@@ -28,7 +28,7 @@ public class TodoController {
         return todoService.readById(id);
     }
 
-    @GetMapping("/read/list")
+    @GetMapping("/readAll")
     public List<TodoResponseDto> readAllTodo() {
         return todoService.readAll();
     }

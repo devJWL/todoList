@@ -50,15 +50,15 @@ public class TodoRepository {
     }
 
     public TodoResponseDto findById(Long id) {
-        TodoResponseDto todoResponseDto = null;
+        Optional<TodoResponseDto> todoResponseDto = Optional.empty();
         try {
             Todo todo = findByIdHelper(id).orElseThrow(() -> new Exception("해당 번호의 글은 존재하지 않습니다."));
-            todoResponseDto = new TodoResponseDto(todo);
+            todoResponseDto = Optional.of(new TodoResponseDto(todo));
         }
         catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        return todoResponseDto;
+        return todoResponseDto.orElse(new TodoResponseDto());
     }
 
     public List<TodoResponseDto> findAll() {
@@ -74,6 +74,7 @@ public class TodoRepository {
                 return new TodoResponseDto(id, title, contents, writer, timestamp.toLocalDateTime());
             }
         });
+
         todoResponseDtoList.sort(new Comparator<TodoResponseDto>() {
             @Override
             public int compare(TodoResponseDto o1, TodoResponseDto o2) {
@@ -143,6 +144,4 @@ public class TodoRepository {
             return Optional.ofNullable(todo);
         }, id);
     }
-
-
 }
