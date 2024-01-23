@@ -5,7 +5,7 @@
 + Spring boot 3.2.2
 + JDK 17
 + Lombok
-+ MySqL
++ MySQL
 ---
 ## 기능
 1. 일정 등록
