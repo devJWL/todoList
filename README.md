@@ -17,4 +17,4 @@
 ## API 명세서
 | 기능 | Method | URL | Request Param | Request Body| Response Body |
 |:---:|:---:|:---:|:---:|:---:|:---:|
-
+| 등록 | POST | /api/todo/create | - | {'title':title, <br>'contents':contents, <br>'writer':writer, <br>'password':password} | 'id':id <br>'title':title, <br>'contents':contents, <br>'writer':writer, <br>'localDateTime':localDateTime}|
